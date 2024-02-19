@@ -19,7 +19,6 @@
 //
 // console.log(bubbleSort([3, 10, 4, 3]))
 
-
 // 17
 // const openingSymbols = ['(', '[', '{', '<'];
 // const closingSymbols = [')', ']', '}', '>'];
@@ -43,7 +42,6 @@
 //
 // console.log(isBracketStructureBalanced('}'));
 
-
 // 18
 // const getIntersectionOfSortedArrays = (arr1, arr2) => {
 //     let i1 = 0;
@@ -66,7 +64,6 @@
 // };
 //
 // console.log(getIntersectionOfSortedArrays([1, 1, 1, 2, 2, 2], [1, 1, 2, 2, 3, 3])); // [10, 24]
-
 
 // 19
 // const getDistance = ([x1, y1], [x2, y2]) => {
@@ -107,7 +104,6 @@
 //
 // console.log(getTheNearestLocation(locations, currentPoint)); // ['Museum', [8, 4]]
 
-
 // 20
 // export const getMax = (arr) => {
 //     if (!arr.length) {
@@ -125,7 +121,6 @@
 // console.log(getMax([])); // null
 // console.log(getMax([1, 10, 8])); // 10
 
-
 // 21
 // export const flatten = (arr) => {
 //     let resultArr = [];
@@ -139,7 +134,6 @@
 // console.log(flatten([])); // []
 // console.log(flatten([1, [3, 2], 9])); // [1, 3, 2, 9]
 // console.log(flatten([1, [[2], [3]], [9]])); // [1, [2], [3], 9]
-
 
 // 8. Морской бой
 // export const calcShipsCount = (ships) => {
@@ -190,29 +184,28 @@
 //     [0, 1, 1, 1],
 // ])); // false
 
-
 // 9. Самая длинная подстрока
 const getLongestLength = (text) => {
-    const textLength = text.length;
-    let maxLength = 0;
-    for (let i = 0; i < textLength; i += 1) {
-        let max = 0;
-        const symbols = [];
-        for (let j = i; j < textLength; j += 1) {
-            if (symbols.indexOf(text[j]) > -1) {
-                max = Math.max(symbols.length, max);
-                break;
-            } else {
-                symbols.push(text[j]);
-            }
-        }
-        if (max === 0) {
-            max = symbols.length;
-        }
-        maxLength = Math.max(symbols.length, maxLength);
+  const textLength = text.length;
+  let maxLength = 0;
+  for (let i = 0; i < textLength; i += 1) {
+    let max = 0;
+    const symbols = [];
+    for (let j = i; j < textLength; j += 1) {
+      if (symbols.indexOf(text[j]) > -1) {
+        max = Math.max(symbols.length, max);
+        break;
+      } else {
+        symbols.push(text[j]);
+      }
     }
+    if (max === 0) {
+      max = symbols.length;
+    }
+    maxLength = Math.max(symbols.length, maxLength);
+  }
 
-    return maxLength;
+  return maxLength;
 };
 
 export default getLongestLength;
