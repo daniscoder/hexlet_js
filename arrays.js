@@ -185,30 +185,49 @@
 // ])); // false
 
 // 9. Самая длинная подстрока
-const getLongestLength = (text) => {
-  const textLength = text.length;
-  let maxLength = 0;
-  for (let i = 0; i < textLength; i += 1) {
-    let max = 0;
-    const symbols = [];
-    for (let j = i; j < textLength; j += 1) {
-      if (symbols.indexOf(text[j]) > -1) {
-        max = Math.max(symbols.length, max);
-        break;
-      } else {
-        symbols.push(text[j]);
-      }
-    }
-    if (max === 0) {
-      max = symbols.length;
-    }
-    maxLength = Math.max(symbols.length, maxLength);
-  }
+// const getLongestLength = (text) => {
+//   const textLength = text.length;
+//   let maxLength = 0;
+//   for (let i = 0; i < textLength; i += 1) {
+//     let max = 0;
+//     const symbols = [];
+//     for (let j = i; j < textLength; j += 1) {
+//       if (symbols.indexOf(text[j]) > -1) {
+//         max = Math.max(symbols.length, max);
+//         break;
+//       } else {
+//         symbols.push(text[j]);
+//       }
+//     }
+//     if (max === 0) {
+//       max = symbols.length;
+//     }
+//     maxLength = Math.max(symbols.length, maxLength);
+//   }
+//
+//   return maxLength;
+// };
+//
+// export default getLongestLength;
+//
+// console.log(getLongestLength('abcddef')); // 5
+// console.log(getLongestLength('jabjcdel')); // 7
 
-  return maxLength;
+// 5. Улитка
+const buildSnailPath = (arr) => {
+  let resArr = [];
+  while (arr.length) {
+    resArr.push(...arr.shift());
+    arr.map((row) => resArr.push(row.pop()));
+    arr.reverse().map((row) => row.reverse());
+  }
+  return resArr;
 };
 
-export default getLongestLength;
-
-console.log(getLongestLength('abcddef')); // 5
-console.log(getLongestLength('jabjcdel')); // 7
+console.log(
+  buildSnailPath([
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9, 10, 11, 12],
+  ]),
+);
