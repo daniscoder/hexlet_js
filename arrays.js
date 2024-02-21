@@ -219,6 +219,7 @@ const buildSnailPath = (arr) => {
   while (arr.length) {
     resArr.push(...arr.shift());
     arr.map((row) => resArr.push(row.pop()));
+
     arr.reverse().map((row) => row.reverse());
   }
   return resArr;
