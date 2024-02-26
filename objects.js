@@ -50,18 +50,41 @@
 // console.log(getDomainInfo('http://google.com'));
 
 // 6. Проверка существования свойства
-import _ from 'lodash';
+// import _ from 'lodash';
+//
+// export default function countWords(text) {
+//   const result = {};
+//   for (const word of _.words(text.toLowerCase())) {
+//     result[word] = (result[word] ?? 0) + 1;
+//   }
+//   return result;
+// }
+//
+// console.log(countWords(''));
+// const text1 = 'one two     three,two ONE one wow';
+// console.log(countWords(text1));
+// const text2 = 'another one sentence with strange Words words';
+// console.log(countWords(text2));
 
-export default function countWords(text) {
+// 7. Обход свойств объекта
+export default function pick(data, keys) {
   const result = {};
-  for (const word of _.words(text.toLowerCase())) {
-    result[word] = (result[word] ?? 0) + 1;
+  for (const key of keys) {
+    if (Object.hasOwn(data, key)) {
+      result[key] = data[key];
+    }
   }
   return result;
 }
 
-console.log(countWords(''));
-const text1 = 'one two     three,two ONE one wow';
-console.log(countWords(text1));
-const text2 = 'another one sentence with strange Words words';
-console.log(countWords(text2));
+const data = {
+  user: 'ubuntu',
+  cores: 4,
+  os: 'linux',
+};
+console.log(pick(data, ['user'])); // { user: 'ubuntu' }
+console.log(pick(data, ['user', 'os'])); // { user: 'ubuntu', os: 'linux' }
+console.log(pick(data, [])); // {}
+// Если такого свойства нет в исходных данных,
+// то оно игнорируется
+console.log(pick(data, ['none', 'cores'])); // { cores: 4 }
