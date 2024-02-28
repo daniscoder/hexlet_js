@@ -188,19 +188,55 @@
 // console.log(make('Hexlet', { website: 'hexlet.io', state: 'published' }));
 
 // 12. Деструктуризация
-export default function getSortedNames(users) {
-  const names = [];
-  for (const { name } of users) {
-    names.push(name);
-  }
-  return names.sort();
+// export default function getSortedNames(users) {
+//   const names = [];
+//   for (const { name } of users) {
+//     names.push(name);
+//   }
+//   return names.sort();
+// }
+//
+// const users = [
+//   { name: 'Bronn', gender: 'male', birthday: '1973-03-23' },
+//   { name: 'Reigar', gender: 'male', birthday: '1973-11-03' },
+//   { name: 'Eiegon', gender: 'male', birthday: '1963-11-03' },
+//   { name: 'Sansa', gender: 'female', birthday: '2012-11-03' },
+// ];
+//
+// console.log(getSortedNames(users)); // ['Bronn', 'Eiegon', 'Reigar', 'Sansa']
+
+// 13. Хеш-таблицы
+import crc32 from 'crc-32';
+
+function make() {
+  return [];
 }
 
-const users = [
-  { name: 'Bronn', gender: 'male', birthday: '1973-03-23' },
-  { name: 'Reigar', gender: 'male', birthday: '1973-11-03' },
-  { name: 'Eiegon', gender: 'male', birthday: '1963-11-03' },
-  { name: 'Sansa', gender: 'female', birthday: '2012-11-03' },
-];
+function set(map, key, value) {
+  const hash = crc32.str(key);
+  const index = Math.abs(hash) % 1000;
+  map[index] = [key, value];
+}
 
-console.log(getSortedNames(users)); // ['Bronn', 'Eiegon', 'Reigar', 'Sansa']
+function get(map, key, defaultValue = null) {
+  const hash = crc32.str(key);
+  const index = Math.abs(hash) % 1000;
+  if (!Array.hasOwnProperty(map, index)) {
+    return defaultValue;
+  }
+  return map[index];
+}
+
+const map = make();
+console.log(get(map, 'key'));
+console.log(get(map, 'key', 'value'));
+
+set(map, 'key2', 'value2');
+
+console.log(get(map, 'key2'));
+
+console.log(get(map, 'undefined'));
+
+set(map, 'key2', 'another value');
+console.log(get(map, 'key2'));
+
