@@ -208,35 +208,47 @@
 // 13. Хеш-таблицы
 import crc32 from 'crc-32';
 
+function getHashIndex(key) {
+  return Math.abs(crc32.str(key));
+}
+
 function make() {
   return [];
 }
 
 function set(map, key, value) {
-  const hash = crc32.str(key);
-  const index = Math.abs(hash) % 1000;
+  const index = getHashIndex(key);
+  if (index in map && map[index][0] !== key) {
+    return false;
+  }
   map[index] = [key, value];
+  return true;
 }
 
 function get(map, key, defaultValue = null) {
-  const hash = crc32.str(key);
-  const index = Math.abs(hash) % 1000;
-  if (!Array.hasOwnProperty(map, index)) {
+  const index = getHashIndex(key);
+  if (!(index in map)) {
     return defaultValue;
   }
-  return map[index];
+  const [currentKey, value] = map[index];
+  return currentKey === key ? value : defaultValue;
 }
 
+export { make, set, get };
+
 const map = make();
+
 console.log(get(map, 'key'));
 console.log(get(map, 'key', 'value'));
-
 set(map, 'key2', 'value2');
-
 console.log(get(map, 'key2'));
-
 console.log(get(map, 'undefined'));
-
 set(map, 'key2', 'another value');
 console.log(get(map, 'key2'));
 
+set(map, 'aaaaa0.462031558722291', 'vvv');
+set(map, 'aaaaa0.0585754039730588', 'boom!');
+console.log(get(map, 'aaaaa0.462031558722291'));
+console.log(get(map, 'aaaaa0.0585754039730588'));
+set(map, 'aaaaa0.462031558722291', 'wop');
+console.log(get(map, 'aaaaa0.462031558722291'));
