@@ -47,22 +47,46 @@
 // // ['Sat Apr 24 1993', 'Fri Sep 12 1997', 'Sun Nov 18 2001']
 
 // 8. Объекты первого класса
-const run = (text) => {
-  // BEGIN (write your solution here)
-  const takeLast = (text, n) => {
-    if (text === '' || text.length < n) {
-      return null;
-    }
-    return text.slice(text.length - n).split('').reverse().join('');
-  }
-  // END
+// const run = (text) => {
+//   // BEGIN (write your solution here)
+//   const takeLast = (text, n) => {
+//     if (text === '' || text.length < n) {
+//       return null;
+//     }
+//     return text.slice(text.length - n).split('').reverse().join('');
+//   }
+//   // END
+//
+//   return takeLast(text, 4);
+// };
+//
+// console.log(run(''));       // null
+// console.log(run('cb'));     // null
+// console.log(run('power'));  // rewo
+// console.log(run('hexlet')); // telx
 
-  return takeLast(text, 4);
+// 9. Функции высшего порядка
+const takeOldest = (users, num = 1) => {
+  const compare = (a, b) => {
+    const aParse = Date.parse(a.birthday);
+    const bParse = Date.parse(b.birthday);
+    if (aParse === bParse) {
+      return 0;
+    }
+    return aParse > bParse ? 1 : -1;
+  };
+
+  users.sort(compare);
+  return users.slice(0, num);
 };
 
-console.log(run(''));       // null
-console.log(run('cb'));     // null
-console.log(run('power'));  // rewo
-console.log(run('hexlet')); // telx
+const users = [
+  { name: 'Tirion', birthday: 'Nov 19, 1988' },
+  { name: 'Sam', birthday: 'Nov 22, 1999' },
+  { name: 'Rob', birthday: 'Jan 11, 1975' },
+  { name: 'Sansa', birthday: 'Mar 20, 2001' },
+  { name: 'Tisha', birthday: 'Feb 27, 1992' },
+  { name: 'Chris', birthday: 'Dec 25, 1995' },
+];
 
-export default run;
+console.log(takeOldest(users));
