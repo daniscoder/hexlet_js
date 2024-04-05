@@ -66,27 +66,82 @@
 // console.log(run('hexlet')); // telx
 
 // 9. Функции высшего порядка
-const takeOldest = (users, num = 1) => {
-  const compare = (a, b) => {
-    const aParse = Date.parse(a.birthday);
-    const bParse = Date.parse(b.birthday);
-    if (aParse === bParse) {
-      return 0;
-    }
-    return aParse > bParse ? 1 : -1;
-  };
+// const takeOldest = (users, num = 1) => {
+//   const compare = (a, b) => {
+//     const aParse = Date.parse(a.birthday);
+//     const bParse = Date.parse(b.birthday);
+//     if (aParse === bParse) {
+//       return 0;
+//     }
+//     return aParse > bParse ? 1 : -1;
+//   };
+//
+//   users.sort(compare);
+//   return users.slice(0, num);
+// };
+//
+// const users = [
+//   { name: 'Tirion', birthday: 'Nov 19, 1988' },
+//   { name: 'Sam', birthday: 'Nov 22, 1999' },
+//   { name: 'Rob', birthday: 'Jan 11, 1975' },
+//   { name: 'Sansa', birthday: 'Mar 20, 2001' },
+//   { name: 'Tisha', birthday: 'Feb 27, 1992' },
+//   { name: 'Chris', birthday: 'Dec 25, 1995' },
+// ];
+//
+// console.log(takeOldest(users));
 
-  users.sort(compare);
-  return users.slice(0, num);
-};
+// 10. Отображение (map)
+// const getChildren = (users) => users.map((user) => user.children).flat();
+//
+// const users = [
+//   {
+//     name: 'Tirion',
+//     children: [{ name: 'Mira', birthday: '1983-03-23' }],
+//   },
+//   { name: 'Bronn', children: [] },
+//   {
+//     name: 'Sam',
+//     children: [
+//       { name: 'Aria', birthday: '2012-11-03' },
+//       { name: 'Keit', birthday: '1933-05-14' },
+//     ],
+//   },
+//   {
+//     name: 'Rob',
+//     children: [{ name: 'Tisha', birthday: '2012-11-03' }],
+//   },
+// ];
+//
+// console.log(getChildren(users));
+
+// 11. Фильтрация (filter)
+const getGirlFriends = (users) =>
+  users
+    .map((user) => user.friends)
+    .flat()
+    .filter((friend) => friend.gender === 'female');
 
 const users = [
-  { name: 'Tirion', birthday: 'Nov 19, 1988' },
-  { name: 'Sam', birthday: 'Nov 22, 1999' },
-  { name: 'Rob', birthday: 'Jan 11, 1975' },
-  { name: 'Sansa', birthday: 'Mar 20, 2001' },
-  { name: 'Tisha', birthday: 'Feb 27, 1992' },
-  { name: 'Chris', birthday: 'Dec 25, 1995' },
+  {
+    name: 'Tirion',
+    friends: [
+      { name: 'Mira', gender: 'female' },
+      { name: 'Ramsey', gender: 'male' },
+    ],
+  },
+  { name: 'Bronn', friends: [] },
+  {
+    name: 'Sam',
+    friends: [
+      { name: 'Aria', gender: 'female' },
+      { name: 'Keit', gender: 'female' },
+    ],
+  },
+  {
+    name: 'Rob',
+    friends: [{ name: 'Taywin', gender: 'male' }],
+  },
 ];
 
-console.log(takeOldest(users));
+console.log(getGirlFriends(users));
