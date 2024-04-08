@@ -116,32 +116,55 @@
 // console.log(getChildren(users));
 
 // 11. Фильтрация (filter)
-const getGirlFriends = (users) =>
-  users
-    .map((user) => user.friends)
-    .flat()
-    .filter((friend) => friend.gender === 'female');
+// const getGirlFriends = (users) =>
+//   users
+//     .map((user) => user.friends)
+//     .flat()
+//     .filter((friend) => friend.gender === 'female');
+//
+// const users = [
+//   {
+//     name: 'Tirion',
+//     friends: [
+//       { name: 'Mira', gender: 'female' },
+//       { name: 'Ramsey', gender: 'male' },
+//     ],
+//   },
+//   { name: 'Bronn', friends: [] },
+//   {
+//     name: 'Sam',
+//     friends: [
+//       { name: 'Aria', gender: 'female' },
+//       { name: 'Keit', gender: 'female' },
+//     ],
+//   },
+//   {
+//     name: 'Rob',
+//     friends: [{ name: 'Taywin', gender: 'male' }],
+//   },
+// ];
+//
+// console.log(getGirlFriends(users));
 
-const users = [
-  {
-    name: 'Tirion',
-    friends: [
-      { name: 'Mira', gender: 'female' },
-      { name: 'Ramsey', gender: 'male' },
-    ],
-  },
-  { name: 'Bronn', friends: [] },
-  {
-    name: 'Sam',
-    friends: [
-      { name: 'Aria', gender: 'female' },
-      { name: 'Keit', gender: 'female' },
-    ],
-  },
-  {
-    name: 'Rob',
-    friends: [{ name: 'Taywin', gender: 'male' }],
-  },
+// 12. Агрегация (reduce)
+const groupBy = (args, mark) => args.reduce((acc, arg) => {
+  if (!Object.hasOwn(acc, arg[mark])) {
+    acc[arg[mark]] = [];
+  }
+  acc[arg[mark]].push(arg);
+  return acc;
+}, {});
+
+const students = [
+  { name: 'Tirion', class: 'B', mark: 2 },
+  { name: 'Keit', class: 'A', mark: 3 },
+  { name: 'Ramsey', class: 'A', mark: 4 },
+  { name: 'Bronn', class: 'B', mark: 3 },
+  { name: 'Sam', class: 'A', mark: 2 },
+  { name: 'Aria', class: 'B', mark: 5 },
+  { name: 'Keit', class: 'B', mark: 4 },
+  { name: 'Rob', class: 'B', mark: 4 },
+  { name: 'Taywin', class: 'A', mark: 5 },
 ];
 
-console.log(getGirlFriends(users));
+console.log(groupBy(students, 'class'));
