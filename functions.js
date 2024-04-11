@@ -172,18 +172,17 @@
 // 13. Сигналы
 const freeEmailDomains = ['gmail.com', 'yandex.ru', 'hotmail.com', 'yahoo.com'];
 
-const getFreeDomainsCount = (emails) => freeEmailDomains.reduce((res, freeEmailDomain) => {
-  const domainsCount = emails.reduce((acc, email) => {
-    if (email.endsWith(freeEmailDomain)) {
-      acc += 1;
-    }
-    return acc;
-  }, 0);
-  if (domainsCount > 0) {
-    res[freeEmailDomain] = domainsCount;
-  }
-  return res;
-}, {});
+const getFreeDomainsCount = (emails) =>
+  emails
+    .map((email) => {
+      const [, domain] = email.split('@');
+      return domain;
+    })
+    .filter((domain) => freeEmailDomains.includes(domain))
+    .reduce((acc, domain) => {
+      Object.hasOwn(acc, domain) ? (acc[domain] += 1) : (acc[domain] = 1);
+      return acc;
+    }, {});
 
 const emails = [
   'info@gmail.com',
