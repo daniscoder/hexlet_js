@@ -147,24 +147,54 @@
 // console.log(getGirlFriends(users));
 
 // 12. Агрегация (reduce)
-const groupBy = (args, mark) => args.reduce((acc, arg) => {
-  if (!Object.hasOwn(acc, arg[mark])) {
-    acc[arg[mark]] = [];
+// const groupBy = (args, mark) => args.reduce((acc, arg) => {
+//   if (!Object.hasOwn(acc, arg[mark])) {
+//     acc[arg[mark]] = [];
+//   }
+//   acc[arg[mark]].push(arg);
+//   return acc;
+// }, {});
+//
+// const students = [
+//   { name: 'Tirion', class: 'B', mark: 2 },
+//   { name: 'Keit', class: 'A', mark: 3 },
+//   { name: 'Ramsey', class: 'A', mark: 4 },
+//   { name: 'Bronn', class: 'B', mark: 3 },
+//   { name: 'Sam', class: 'A', mark: 2 },
+//   { name: 'Aria', class: 'B', mark: 5 },
+//   { name: 'Keit', class: 'B', mark: 4 },
+//   { name: 'Rob', class: 'B', mark: 4 },
+//   { name: 'Taywin', class: 'A', mark: 5 },
+// ];
+//
+// console.log(groupBy(students, 'class'));
+
+// 13. Сигналы
+const freeEmailDomains = ['gmail.com', 'yandex.ru', 'hotmail.com', 'yahoo.com'];
+
+const getFreeDomainsCount = (emails) => freeEmailDomains.reduce((res, freeEmailDomain) => {
+  const domainsCount = emails.reduce((acc, email) => {
+    if (email.endsWith(freeEmailDomain)) {
+      acc += 1;
+    }
+    return acc;
+  }, 0);
+  if (domainsCount > 0) {
+    res[freeEmailDomain] = domainsCount;
   }
-  acc[arg[mark]].push(arg);
-  return acc;
+  return res;
 }, {});
 
-const students = [
-  { name: 'Tirion', class: 'B', mark: 2 },
-  { name: 'Keit', class: 'A', mark: 3 },
-  { name: 'Ramsey', class: 'A', mark: 4 },
-  { name: 'Bronn', class: 'B', mark: 3 },
-  { name: 'Sam', class: 'A', mark: 2 },
-  { name: 'Aria', class: 'B', mark: 5 },
-  { name: 'Keit', class: 'B', mark: 4 },
-  { name: 'Rob', class: 'B', mark: 4 },
-  { name: 'Taywin', class: 'A', mark: 5 },
+const emails = [
+  'info@gmail.com',
+  'info@yandex.ru',
+  'info@hotmail.com',
+  'mk@host.com',
+  'support@hexlet.io',
+  'key@yandex.ru',
+  'sergey@gmail.com',
+  'vovan@gmail.com',
+  'vovan@hotmail.com',
 ];
 
-console.log(groupBy(students, 'class'));
+console.log(getFreeDomainsCount(emails));
