@@ -170,30 +170,43 @@
 // console.log(groupBy(students, 'class'));
 
 // 13. Сигналы
-const freeEmailDomains = ['gmail.com', 'yandex.ru', 'hotmail.com', 'yahoo.com'];
+// const freeEmailDomains = ['gmail.com', 'yandex.ru', 'hotmail.com', 'yahoo.com'];
+//
+// const getFreeDomainsCount = (emails) =>
+//   emails
+//     .map((email) => {
+//       const [, domain] = email.split('@');
+//       return domain;
+//     })
+//     .filter((domain) => freeEmailDomains.includes(domain))
+//     .reduce((acc, domain) => {
+//       Object.hasOwn(acc, domain) ? (acc[domain] += 1) : (acc[domain] = 1);
+//       return acc;
+//     }, {});
+//
+// const emails = [
+//   'info@gmail.com',
+//   'info@yandex.ru',
+//   'info@hotmail.com',
+//   'mk@host.com',
+//   'support@hexlet.io',
+//   'key@yandex.ru',
+//   'sergey@gmail.com',
+//   'vovan@gmail.com',
+//   'vovan@hotmail.com',
+// ];
+//
+// console.log(getFreeDomainsCount(emails));
 
-const getFreeDomainsCount = (emails) =>
-  emails
-    .map((email) => {
-      const [, domain] = email.split('@');
-      return domain;
-    })
-    .filter((domain) => freeEmailDomains.includes(domain))
-    .reduce((acc, domain) => {
-      Object.hasOwn(acc, domain) ? (acc[domain] += 1) : (acc[domain] = 1);
-      return acc;
-    }, {});
+// 14. Рекурсия
+const sequenceSum = (begin, end) => {
+  if (end < begin) {
+    return NaN;
+  }
+  if (begin === end) {
+    return end;
+  }
+  return begin + sequenceSum(begin + 1, end);
+};
 
-const emails = [
-  'info@gmail.com',
-  'info@yandex.ru',
-  'info@hotmail.com',
-  'mk@host.com',
-  'support@hexlet.io',
-  'key@yandex.ru',
-  'sergey@gmail.com',
-  'vovan@gmail.com',
-  'vovan@hotmail.com',
-];
-
-console.log(getFreeDomainsCount(emails));
+console.log(sequenceSum(4, 10));
