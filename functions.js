@@ -199,14 +199,30 @@
 // console.log(getFreeDomainsCount(emails));
 
 // 14. Рекурсия
-const sequenceSum = (begin, end) => {
-  if (end < begin) {
-    return NaN;
+// const sequenceSum = (begin, end) => {
+//   if (end < begin) {
+//     return NaN;
+//   }
+//   if (begin === end) {
+//     return end;
+//   }
+//   return begin + sequenceSum(begin + 1, end);
+// };
+//
+// console.log(sequenceSum(4, 10));
+
+// 15. Итеративный процесс
+const smallestDivisor = (num) => {
+  if (num === 1) {
+    return 1;
   }
-  if (begin === end) {
-    return end;
-  }
-  return begin + sequenceSum(begin + 1, end);
+  const iter = (counter) => {
+    if (num % counter === 0) {
+      return counter;
+    }
+    return iter(counter + 1);
+  };
+  return iter(2);
 };
 
-console.log(sequenceSum(4, 10));
+console.log(smallestDivisor(17));
