@@ -27,9 +27,17 @@ const getX = (point) => point.x;
 
 const getY = (point) => point.y;
 
-const makeSegment = (beginPoint, endPoint) => {
-  return  { beginPoint, endPoint }
-}
+const makeSegment = (beginPoint, endPoint) => ({ beginPoint, endPoint });
+
+const getMidpointOfSegment = (segment) =>
+  makeDecartPoint(
+    (getX(segment.beginPoint) + getX(segment.endPoint)) / 2,
+    (getY(segment.beginPoint) + getY(segment.endPoint)) / 2,
+  );
+
+const getBeginPoint = (segment) => segment.beginPoint;
+
+const getEndPoint = (segment) => segment.endPoint;
 
 const beginPoint = makeDecartPoint(3, 2);
 const endPoint = makeDecartPoint(0, 0);
