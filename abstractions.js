@@ -73,8 +73,7 @@
 
 // 7. Уровневое проектирование
 const makeDecartPoint = (x, y) => {
-  const point = { x, y };
-  return point;
+  return { x, y };
 };
 
 const getX = (point) => point.x;
@@ -110,6 +109,26 @@ const getWidth = (rectangle) => rectangle.width;
 const getHeight = (rectangle) => rectangle.height;
 
 const containsOrigin = (rectangle) => {
-  const quadrantList = [1, 2, 3, 4];
-  
+  const point = getStartPoint(rectangle);
+  const x1 = getX(point);
+  const y1 = getY(point);
+  const x2 = getX(point) + getWidth(rectangle);
+  const y2 = getY(point) - getHeight(rectangle);
+  const quadrantList = [
+    getQuadrant(point),
+    getQuadrant(makeDecartPoint(x2, y1)),
+    getQuadrant(makeDecartPoint(x1, y2)),
+    getQuadrant(makeDecartPoint(x2, y2)),
+  ];
+  // console.log(quadrantList);
+  return quadrantList.sort().join('') === '1234';
 };
+
+const p = makeDecartPoint(0, 1);
+const rectangle = makeRectangle(p, 4, 5);
+
+console.log(containsOrigin(rectangle)); // false
+console.log(getWidth(rectangle)); // 4
+
+const rectangle2 = makeRectangle(makeDecartPoint(-4, 3), 5, 4);
+console.log(containsOrigin(rectangle2)); // true
