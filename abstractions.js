@@ -72,63 +72,109 @@
 // console.log(getY(point)); // 8
 
 // 7. Уровневое проектирование
-const makeDecartPoint = (x, y) => {
-  return { x, y };
+// const makeDecartPoint = (x, y) => {
+//   return { x, y };
+// };
+//
+// const getX = (point) => point.x;
+//
+// const getY = (point) => point.y;
+//
+// const getQuadrant = (point) => {
+//   const x = getX(point);
+//   const y = getY(point);
+//
+//   if (x > 0 && y > 0) {
+//     return 1;
+//   }
+//   if (x < 0 && y > 0) {
+//     return 2;
+//   }
+//   if (x < 0 && y < 0) {
+//     return 3;
+//   }
+//   if (x > 0 && y < 0) {
+//     return 4;
+//   }
+//
+//   return null;
+// };
+//
+// const makeRectangle = (point, width, height) => ({ point, width, height });
+//
+// const getStartPoint = (rectangle) => rectangle.point;
+//
+// const getWidth = (rectangle) => rectangle.width;
+//
+// const getHeight = (rectangle) => rectangle.height;
+//
+// const containsOrigin = (rectangle) => {
+//   const point = getStartPoint(rectangle);
+//   const x1 = getX(point);
+//   const y1 = getY(point);
+//   const x2 = getX(point) + getWidth(rectangle);
+//   const y2 = getY(point) - getHeight(rectangle);
+//   const quadrantList = [
+//     getQuadrant(point),
+//     getQuadrant(makeDecartPoint(x2, y1)),
+//     getQuadrant(makeDecartPoint(x1, y2)),
+//     getQuadrant(makeDecartPoint(x2, y2)),
+//   ];
+//   // console.log(quadrantList);
+//   return quadrantList.sort().join('') === '1234';
+// };
+//
+// const p = makeDecartPoint(0, 1);
+// const rectangle = makeRectangle(p, 4, 5);
+//
+// console.log(containsOrigin(rectangle)); // false
+// console.log(getWidth(rectangle)); // 4
+//
+// const rectangle2 = makeRectangle(makeDecartPoint(-4, 3), 5, 4);
+// console.log(containsOrigin(rectangle2)); // true
+
+// 8. Инварианты
+const makeRational = (number, denom) => {
+  for (let normValue = Math.min(Math.abs(number), Math.abs(denom)); normValue > 0; normValue -= 1) {
+    if (number % normValue === 0 && denom % normValue === 0) {
+      return { number: number / normValue, denom: denom / normValue };
+    }
+  }
+  return { number, denom };
 };
 
-const getX = (point) => point.x;
+const getNumer = (rational) => rational.number;
 
-const getY = (point) => point.y;
+const getDenom = (rational) => rational.denom;
 
-const getQuadrant = (point) => {
-  const x = getX(point);
-  const y = getY(point);
-
-  if (x > 0 && y > 0) {
-    return 1;
-  }
-  if (x < 0 && y > 0) {
-    return 2;
-  }
-  if (x < 0 && y < 0) {
-    return 3;
-  }
-  if (x > 0 && y < 0) {
-    return 4;
-  }
-
-  return null;
+const add = (rational1, rational2) => {
+  const number = getNumer(rational1) * getDenom(rational2)
+    + getNumer(rational2) * getDenom(rational1);
+  const demon = getDenom(rational1) * getDenom(rational2);
+  return makeRational(number, demon);
 };
 
-const makeRectangle = (point, width, height) => ({ point, width, height });
-
-const getStartPoint = (rectangle) => rectangle.point;
-
-const getWidth = (rectangle) => rectangle.width;
-
-const getHeight = (rectangle) => rectangle.height;
-
-const containsOrigin = (rectangle) => {
-  const point = getStartPoint(rectangle);
-  const x1 = getX(point);
-  const y1 = getY(point);
-  const x2 = getX(point) + getWidth(rectangle);
-  const y2 = getY(point) - getHeight(rectangle);
-  const quadrantList = [
-    getQuadrant(point),
-    getQuadrant(makeDecartPoint(x2, y1)),
-    getQuadrant(makeDecartPoint(x1, y2)),
-    getQuadrant(makeDecartPoint(x2, y2)),
-  ];
-  // console.log(quadrantList);
-  return quadrantList.sort().join('') === '1234';
+const sub = (rational1, rational2) => {
+  const number = getNumer(rational1) * getDenom(rational2)
+    - getNumer(rational2) * getDenom(rational1);
+  const demon = getDenom(rational1) * getDenom(rational2);
+  return makeRational(number, demon);
 };
 
-const p = makeDecartPoint(0, 1);
-const rectangle = makeRectangle(p, 4, 5);
+const ratToString = (rat) => `${getNumer(rat)}/${getDenom(rat)}`;
 
-console.log(containsOrigin(rectangle)); // false
-console.log(getWidth(rectangle)); // 4
+const rat1 = makeRational(-4, 16);
+console.log(rat1);
+console.log(getNumer(rat1)); // 1
+console.log(getDenom(rat1)); // 3
 
-const rectangle2 = makeRectangle(makeDecartPoint(-4, 3), 5, 4);
-console.log(containsOrigin(rectangle2)); // true
+const rat2 = makeRational(12, 5);
+console.log(rat2);
+
+const rat3 = add(rat1, rat2);
+console.log(rat3);
+ratToString(rat3); // '11/3'
+
+const rat4 = sub(rat1, rat2);
+console.log(rat4);
+ratToString(rat4); // '-3/1'
