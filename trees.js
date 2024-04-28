@@ -14,23 +14,50 @@
 // console.log(removeFirstLevel(tree2)); // [3, 5, [4, 3], 2]
 
 // 3. Виртуальная файловая система
-import { mkdir, mkfile } from '@hexlet/immutable-fs-trees';
+// import { mkdir, mkfile } from '@hexlet/immutable-fs-trees';
+//
+// const func = () =>
+//   mkdir(
+//     'nodejs-package',
+//     [
+//       mkfile('Makefile'),
+//       mkfile('README.md'),
+//       mkdir('dist', []),
+//       mkdir('__tests__', [mkfile('half.test.js', { type: 'text/javascript' })]),
+//       mkfile('babel.config.js', { type: 'text/javascript' }),
+//       mkdir('node_modules', [mkdir('@babel', [mkdir('cli', [mkfile('LICENSE')])])], {
+//         owner: 'root',
+//         hidden: false,
+//       }),
+//     ],
+//     { hidden: true },
+//   );
+//
+// console.log(func());
 
-const func = () =>
-  mkdir(
-    'nodejs-package',
-    [
-      mkfile('Makefile'),
-      mkfile('README.md'),
-      mkdir('dist', []),
-      mkdir('__tests__', [mkfile('half.test.js', { type: 'text/javascript' })]),
-      mkfile('babel.config.js', { type: 'text/javascript' }),
-      mkdir('node_modules', [mkdir('@babel', [mkdir('cli', [mkfile('LICENSE')])])], {
-        owner: 'root',
-        hidden: false,
-      }),
-    ],
-    { hidden: true },
-  );
+// 4. Манипуляции с виртуальной файловой системой
+import _ from 'lodash';
+import * as trees from '@hexlet/immutable-fs-trees';
 
-console.log(func());
+const compressImages = (tree) => trees.mkdir(
+  trees.getName(tree),
+  _.cloneDeep(trees.getChildren(tree)).map((children) => {
+    const meta = trees.getMeta(children);
+    if (trees.isFile(children) && trees.getName(children).endsWith('.jpg')) {
+      meta.size /= 2;
+    }
+    return children;
+  }),
+  _.cloneDeep(trees.getMeta(tree)),
+);
+
+const tree = trees.mkdir('my documents', [
+  trees.mkfile('avatar.jpg', { size: 100, attributes: { hide: false, readOnly: true } }),
+  trees.mkfile('passport.jpg', { size: 200 }),
+  trees.mkfile('family.jpg', { size: 150 }),
+  trees.mkfile('addresses', { size: 125 }),
+  trees.mkdir('presentations'),
+]);
+
+const newTree = compressImages(tree);
+console.log(JSON.stringify(newTree, null, 2));
