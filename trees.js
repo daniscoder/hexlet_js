@@ -63,26 +63,59 @@
 // console.log(JSON.stringify(newTree, null, 2));
 
 // 5. Обход дерева
-import { mkdir, mkfile, isFile, getName, getMeta, getChildren } from '@hexlet/immutable-fs-trees';
-import _ from 'lodash';
+// import { mkdir, mkfile, isFile, getName, getMeta, getChildren } from '@hexlet/immutable-fs-trees';
+// import _ from 'lodash';
+//
+// const downcaseFileNames = (tree) => {
+//   const name = getName(tree);
+//   const meta = _.cloneDeep(getMeta(tree));
+//
+//   if (isFile(tree)) {
+//     return mkfile(name.toLowerCase(), meta);
+//   }
+//
+//   const children = getChildren(tree);
+//   const newChildren = children.map((child) => downcaseFileNames(child));
+//   return mkdir(name, newChildren, meta);
+// };
+//
+// const tree = mkdir('/', [
+//   mkdir('eTc', [mkdir('NgiNx'), mkdir('CONSUL', [mkfile('config.json')])]),
+//   mkfile('hOsts'),
+// ]);
+//
+// console.log(tree);
+// console.log(downcaseFileNames(tree));
 
-const downcaseFileNames = (tree) => {
+// 6. Агрегация
+import _ from 'lodash';
+import { mkdir, mkfile, isFile, getName, getChildren, getMeta } from '@hexlet/immutable-fs-trees';
+
+const getHiddenFilesCount = (tree) => {
   const name = getName(tree);
-  const meta = _.cloneDeep(getMeta(tree));
 
   if (isFile(tree)) {
-    return mkfile(name.toLowerCase(), meta);
+    return name.startsWith('.') ? 1 : 0;
   }
 
   const children = getChildren(tree);
-  const newChildren = children.map((child) => downcaseFileNames(child));
-  return mkdir(name, newChildren, meta);
+  const hiddenFilesCount = children.map((child) => getHiddenFilesCount(child));
+  return _.sum(hiddenFilesCount);
 };
 
 const tree = mkdir('/', [
-  mkdir('eTc', [mkdir('NgiNx'), mkdir('CONSUL', [mkfile('config.json')])]),
-  mkfile('hOsts'),
+  mkdir('etc', [
+    mkdir('apache'),
+    mkdir('nginx', [mkfile('.nginx.conf', { size: 800 })]),
+    mkdir('.consul', [
+      mkfile('.config.json', { size: 1200 }),
+      mkfile('data', { size: 8200 }),
+      mkfile('raft', { size: 80 }),
+    ]),
+  ]),
+  mkfile('.hosts', { size: 3500 }),
+  mkfile('resolve', { size: 1000 }),
 ]);
 
 console.log(tree);
-console.log(downcaseFileNames(tree));
+console.log(getHiddenFilesCount(tree)); // 3
