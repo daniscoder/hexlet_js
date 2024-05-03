@@ -124,9 +124,21 @@
 import _ from 'lodash';
 import { mkdir, mkfile, isFile, getName, getMeta, getChildren } from '@hexlet/immutable-fs-trees';
 
-const du = (tree) => {
+const getFilesSize = (node) => {
+  if (isFile(node)) {
+    const meta = getMeta(node);
+    return meta.size;
+  }
 
-}
+  const children = getChildren(node);
+  const descendantCounts = children.map(getFilesSize);
+  return _.sum(descendantCounts);
+};
+
+const du = (tree) => {
+  const children = getChildren(tree);
+  return children.map((child) => [getName(child), getFilesSize(child)]).sort((a, b) => b[1] - a[1]);
+};
 
 const tree = mkdir('/', [
   mkdir('etc', [
@@ -142,10 +154,10 @@ const tree = mkdir('/', [
   mkfile('resolve', { size: 1000 }),
 ]);
 
-console.log(tree);
 console.log(du(tree));
 // [
 //   ['etc', 10280],
 //   ['hosts', 3500],
 //   ['resolve', 1000],
 // ]
+console.log(du(getChildren(tree)[0]));
