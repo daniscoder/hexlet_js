@@ -121,24 +121,50 @@
 // console.log(getHiddenFilesCount(tree)); // 3
 
 // 7. Агрегация 2
-import _ from 'lodash';
-import { mkdir, mkfile, isFile, getName, getMeta, getChildren } from '@hexlet/immutable-fs-trees';
+// import _ from 'lodash';
+// import { mkdir, mkfile, isFile, getName, getMeta, getChildren } from '@hexlet/immutable-fs-trees';
+//
+// const getFilesSize = (node) => {
+//   if (isFile(node)) {
+//     const meta = getMeta(node);
+//     return meta.size;
+//   }
+//
+//   const children = getChildren(node);
+//   const descendantCounts = children.map(getFilesSize);
+//   return _.sum(descendantCounts);
+// };
+//
+// const du = (tree) => {
+//   const children = getChildren(tree);
+//   return children.map((child) => [getName(child), getFilesSize(child)]).sort((a, b) => b[1] - a[1]);
+// };
+//
+// const tree = mkdir('/', [
+//   mkdir('etc', [
+//     mkdir('apache'),
+//     mkdir('nginx', [mkfile('nginx.conf', { size: 800 })]),
+//     mkdir('consul', [
+//       mkfile('config.json', { size: 1200 }),
+//       mkfile('data', { size: 8200 }),
+//       mkfile('raft', { size: 80 }),
+//     ]),
+//   ]),
+//   mkfile('hosts', { size: 3500 }),
+//   mkfile('resolve', { size: 1000 }),
+// ]);
+//
+// console.log(du(tree));
+// // [
+// //   ['etc', 10280],
+// //   ['hosts', 3500],
+// //   ['resolve', 1000],
+// // ]
+// console.log(du(getChildren(tree)[0]));
 
-const getFilesSize = (node) => {
-  if (isFile(node)) {
-    const meta = getMeta(node);
-    return meta.size;
-  }
-
-  const children = getChildren(node);
-  const descendantCounts = children.map(getFilesSize);
-  return _.sum(descendantCounts);
-};
-
-const du = (tree) => {
-  const children = getChildren(tree);
-  return children.map((child) => [getName(child), getFilesSize(child)]).sort((a, b) => b[1] - a[1]);
-};
+// 8. Аккумулятор
+import path from 'path';
+import { mkdir, mkfile, isFile, getName, getChildren } from '@hexlet/immutable-fs-trees';
 
 const tree = mkdir('/', [
   mkdir('etc', [
@@ -154,10 +180,22 @@ const tree = mkdir('/', [
   mkfile('resolve', { size: 1000 }),
 ]);
 
-console.log(du(tree));
-// [
-//   ['etc', 10280],
-//   ['hosts', 3500],
-//   ['resolve', 1000],
-// ]
-console.log(du(getChildren(tree)[0]));
+const findFilesByName = (tree, subStr) => {
+  const iter = (node, path) => {
+    const name = getName(node);
+    const children = getChildren(node);
+
+    if (isFile(node)) {
+      if (name.includes(subStr)) {
+        return name;
+      }
+      return [];
+    }
+    return children.map((child) => iter(child, path.join(name)));
+  };
+
+  return iter(tree, require(getName(tree)));
+};
+
+console.log(findFilesByName(tree, 'co'));
+// ['/etc/nginx/nginx.conf', '/etc/consul/config.json']
