@@ -163,41 +163,99 @@
 // console.log(du(getChildren(tree)[0]));
 
 // 8. Аккумулятор
-import path from 'path';
-import { mkdir, mkfile, isFile, getName, getChildren } from '@hexlet/immutable-fs-trees';
+// import path from 'path';
+// import { mkdir, mkfile, isFile, getName, getChildren } from '@hexlet/immutable-fs-trees';
+//
+// const tree = mkdir('/', [
+//   mkdir('etc', [
+//     mkdir('apache'),
+//     mkdir('nginx', [mkfile('nginx.conf', { size: 800 })]),
+//     mkdir('consul', [
+//       mkfile('config.json', { size: 1200 }),
+//       mkfile('data', { size: 8200 }),
+//       mkfile('raft', { size: 80 }),
+//     ]),
+//   ]),
+//   mkfile('hosts', { size: 3500 }),
+//   mkfile('resolve', { size: 1000 }),
+// ]);
+//
+// const findFilesByName = (tree, subStr) => {
+//   const iter = (node, depth) => {
+//     const name = getName(node);
+//     const pathName = path.join(depth, name);
+//
+//     if (isFile(node)) {
+//       if (name.includes(subStr)) {
+//         return pathName;
+//       }
+//       return [];
+//     }
+//
+//     const children = getChildren(node);
+//     return children.flatMap((child) => iter(child, pathName));
+//   };
+//
+//   return iter(tree, '');
+// };
+//
+// console.log(findFilesByName(tree, 'co'));
+// // ['/etc/nginx/nginx.conf', '/etc/consul/config.json']
 
-const tree = mkdir('/', [
-  mkdir('etc', [
-    mkdir('apache'),
-    mkdir('nginx', [mkfile('nginx.conf', { size: 800 })]),
-    mkdir('consul', [
-      mkfile('config.json', { size: 1200 }),
-      mkfile('data', { size: 8200 }),
-      mkfile('raft', { size: 80 }),
-    ]),
-  ]),
-  mkfile('hosts', { size: 3500 }),
-  mkfile('resolve', { size: 1000 }),
-]);
+// 9. HTML-дерево
+import _ from 'lodash';
 
-const findFilesByName = (tree, subStr) => {
-  const iter = (node, depth) => {
-    const name = getName(node);
-    const pathName = path.join(depth, name);
-
-    if (isFile(node)) {
-      if (name.includes(subStr)) {
-        return pathName;
-      }
-      return [];
+const changeClass = (tree, oldClass, newClass) => {
+  const iter = (node) => {
+    if (Object.hasOwn(node, 'className')) {
+      node.className = node.className === oldClass ? newClass : node.className;
     }
-
-    const children = getChildren(node);
-    return children.flatMap((child) => iter(child, pathName));
+    if (Object.hasOwn(node, 'children')) {
+      node.children = node.children.map(iter);
+    }
+    return node;
   };
-
-  return iter(tree, '');
+  return iter(_.cloneDeep(tree));
 };
 
-console.log(findFilesByName(tree, 'co'));
-// ['/etc/nginx/nginx.conf', '/etc/consul/config.json']
+const tree = {
+  name: 'div',
+  type: 'tag-internal',
+  className: 'hexlet-community',
+  children: [
+    {
+      name: 'div',
+      type: 'tag-internal',
+      className: 'old-class',
+      children: [],
+    },
+    {
+      name: 'div',
+      type: 'tag-internal',
+      className: 'old-class',
+      children: [],
+    },
+  ],
+};
+
+console.log(changeClass(tree, 'old-class', 'new-class'));
+// Результат:
+// {
+//   name: 'div',
+//   type: 'tag-internal',
+//   className: 'hexlet-community',
+//   children: [
+//     {
+//       name: 'div',
+//       type: 'tag-internal',
+//       className: 'new-class',
+//       children: [],
+//     },
+//     {
+//       name: 'div',
+//       type: 'tag-internal',
+//       className: 'new-class',
+//       children: [],
+//     },
+//   ],
+// }
