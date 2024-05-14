@@ -183,18 +183,20 @@ const tree = mkdir('/', [
 const findFilesByName = (tree, subStr) => {
   const iter = (node, depth) => {
     const name = getName(node);
-    const children = getChildren(node);
+    const pathName = path.join(depth, name);
 
     if (isFile(node)) {
       if (name.includes(subStr)) {
-        return name;
+        return pathName;
       }
       return [];
     }
-    return children.map((child) => iter(child, path.join(depth, name)));
+
+    const children = getChildren(node);
+    return children.flatMap((child) => iter(child, pathName));
   };
 
-  return iter(tree, getName(tree));
+  return iter(tree, '');
 };
 
 console.log(findFilesByName(tree, 'co'));
