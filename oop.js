@@ -13,14 +13,22 @@ const getMutualFriends = (user1, user2) => {
 
 const user1 = makeUser({
   friends: [
-    makeUser({ id: 1 }),
-    makeUser({ id: 2 }), // общий друг
+    makeUser({
+      id: 1
+    }),
+    makeUser({
+      id: 2
+    }), // общий друг
   ],
 });
 const user2 = makeUser({
   friends: [
-    makeUser({ id: 2 }), // общий друг
-    makeUser({ id: 3 }),
+    makeUser({
+      id: 2
+    }), // общий друг
+    makeUser({
+      id: 3
+    }),
   ],
 });
 
