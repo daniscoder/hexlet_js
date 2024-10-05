@@ -79,14 +79,29 @@
 // console.log(rat3.toString()); // '89/24'
 
 // 4. Связывание (bind)
-const bind = (obj, fn) => (...args) => fn.apply(obj, args);
+// const bind = (obj, fn) => (...args) => fn.apply(obj, args);
+//
+// const obj = { number: 7 };
+// const fn = function fn(number) {
+//   return number + this.number;
+// };
+// const fnWithContext = bind(obj, fn);
+//
+// // Принимает столько же аргументов сколько и исходная функция
+// console.log(fnWithContext(3)); // 8
 
-const obj = { number: 7 };
-const fn = function fn(number) {
-  return number + this.number;
-};
-const fnWithContext = bind(obj, fn);
+// 5. Особенности работы this со стрелочными функциями
+// const each = (obj, fn) => obj.map((elem) => fn.apply(elem));
+//
+// const objects = [{ name: 'Karl' }, { name: 'Mia' }];
+// each(objects, function callback() {
+//   this.name = this.name.split('').reverse().join('');
+// });
+//
+// console.log(objects);
+// // [
+// //   { name: 'lraK' },
+// //   { name: 'aiM' },
+// // ];
 
-// Принимает столько же аргументов сколько и исходная функция
-console.log(fnWithContext(3)); // 8
-
+// 6. Конструктор
