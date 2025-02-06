@@ -224,13 +224,10 @@
 
 // 8. Упаковка и Распаковка (Boxing)
 export default function solution(value) {
-  const res = `Value is ${value}`; // создаем строку
-  const obj = {}; // создаем объект с прототипом Object.prototype
-  obj.value = res; // добавляем строку как свойство объекта
-  return obj;
+  return Object(`Value is ${value}`);
 }
 
-console.log(solution('some value').__proto__)
+console.log(solution('some value'))
 console.log(solution(1) + ''); // 'Value is 1'
 console.log(solution(10) + ''); // 'Value is 10'
 console.log(solution('some value') + ''); // 'Value is some value'
