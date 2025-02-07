@@ -223,11 +223,111 @@
 // console.log(money5.format()); // "$10,000.00"
 
 // 8. Упаковка и Распаковка (Boxing)
-export default function solution(value) {
-  return Object(`Value is ${value}`);
+// export default function solution(value) {
+//   const obj = Object();
+//   obj.valueOf = () => `Value is ${value}`
+//   return obj;
+// }
+//
+// console.log(solution('some value').__proto__ + '');
+// console.log(solution(1) + ''); // 'Value is 1'
+// console.log(solution(10) + ''); // 'Value is 10'
+// console.log(solution('some value') + ''); // 'Value is some value'
+
+// 9. toString()
+// function Point(x, y) {
+//   this.x = x;
+//   this.y = y;
+// }
+//
+// Point.prototype.getX = function getX() {
+//   return this.x;
+// };
+//
+// Point.prototype.getY = function getY() {
+//   return this.y;
+// };
+//
+// Point.prototype.toString = function toString() {
+//   return `(${this.getX()}, ${this.getY()})`
+// }
+//
+// function Segment(beginPoint, endPoint) {
+//   this.beginPoint = beginPoint;
+//   this.endPoint = endPoint;
+// }
+//
+// Segment.prototype.getBeginPoint = function getBeginPoint() {
+//   return this.beginPoint;
+// };
+//
+// Segment.prototype.getEndPoint = function getEndPoint() {
+//   return this.endPoint;
+// };
+//
+// Segment.prototype.toString = function toString() {
+//   return `[${this.beginPoint}, ${this.endPoint}]`
+// }
+//
+// const point1 = new Point(1, 10);
+// const point2 = new Point(11, -3);
+// const segment1 = new Segment(point1, point2);
+// console.log(segment1.toString()); // => [(1, 10), (11, -3)]
+//
+// const segment2 = new Segment(point2, point1);
+// console.log(segment2.toString()); // => [(11, -3), (1, 10)]
+
+// 10. Класс
+// export default class Cart {
+//   items = [];
+//
+//   addItem(item, count) {
+//     this.items.push({ item, count });
+//   }
+//
+//   getItems() {
+//     return this.items;
+//   }
+//
+//   getCost() {
+//     return this.items.reduce((acc, item) => item.item.price * item.count + acc, 0);
+//   }
+//
+//   getCount() {
+//     return this.items.reduce((acc, item) => item.count + acc, 0);
+//   }
+// }
+//
+// const cart = new Cart();
+// cart.addItem({ name: 'car', price: 3 }, 5);
+// cart.addItem({ name: 'house', price: 10 }, 2);
+// console.log(cart.getItems().length); // 2
+// console.log(cart.getCost()); // 35
+// console.log(cart.getItems());
+
+// 11. Статические свойства и методы
+export default class Time {
+  // BEGIN (write your solution here)
+
+  static fromString(time) {
+    return new Time(...time.split(':', 2));
+  }
+
+  // END
+
+  constructor(hours, minutes) {
+    this.minutes = minutes;
+    this.hours = hours;
+  }
+
+  toString() {
+    return `${this.hours}:${this.minutes}`;
+  }
 }
 
-console.log(solution('some value'))
-console.log(solution(1) + ''); // 'Value is 1'
-console.log(solution(10) + ''); // 'Value is 10'
-console.log(solution('some value') + ''); // 'Value is some value'
+const time1 = new Time(10, 15);
+console.log(`The time is ${time1}`); // => 'The time is 10:15'
+
+const time2 = Time.fromString('10:23');
+// автоматически вызывается метод toString()
+console.log(`The time is ${time2}`); // 'The time is 10:23'
