@@ -107,9 +107,7 @@
 
 // 6. Fluent Interface
 export default function normalize(arr) {
-  return arr.reduce((acc, elem) => {
-    acc[elem.country.trim().toLowerCase()] = elem.name.trim().toLowerCase()
-  }, {})
+
 }
 
 const countries = [
