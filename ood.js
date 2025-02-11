@@ -106,8 +106,24 @@
 // console.log(url.equals(new Url(googleUrl.replace('80', '443'))))
 
 // 6. Fluent Interface
-export default function normalize(arr) {
+function trim(str) {
+  return str.trim().toLowerCase();
+}
 
+export default function normalize(arr) {
+  const result = arr.reduce((acc, city) => {
+    const name = trim(city.name);
+    const country = trim(city.country);
+    !acc[country] ? (acc[country] = [name]) : acc[country].push(name);
+    return acc;
+  }, {});
+
+  return Object.keys(result)
+    .sort()
+    .reduce((acc, country) => {
+      acc[country] = Array.from(new Set(result[country])).sort();
+      return acc;
+    }, {});
 }
 
 const countries = [
@@ -126,3 +142,23 @@ console.log(normalize(countries));
 //     'miami',
 //   ],
 // }
+
+const raw = [
+  { name: 'istanbul', country: 'turkey' },
+  { name: 'Moscow ', country: ' Russia' },
+  { name: 'iStanbul', country: 'tUrkey' },
+  { name: 'antalia', country: 'turkeY ' },
+  { name: 'samarA', country: '  ruSsiA' },
+  { name: 'Miami', country: 'usa' },
+];
+console.log(normalize(raw));
+// {
+//   france: [
+//     'marcel',
+//     'paris',
+//   ],
+//     spain: [
+//   'madrid',
+//   'valencia',
+// ],
+// };
