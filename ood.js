@@ -164,39 +164,76 @@
 // // };
 
 // 7. Сборщики
-import yup from 'yup';
+// import yup from 'yup';
+//
+// const genres = ['drama', 'horror', 'fantasy', 'classic'];
+//
+// const schema = yup.object().shape({
+//   name: yup.string().required(),
+//   author: yup.string().required(),
+//   pagesCount: yup.number().positive().integer(),
+//   link: yup.string().url().min(1),
+//   genre: yup.string().oneOf(genres),
+// });
+//
+// export default function getInvalidBooks(books) {
+//   return books.filter((book) => !schema.isValidSync(book));
+// }
+//
+// const books = [{ name: 'book', author: 'author' }, { author: 'author 2' }];
+// console.log(getInvalidBooks(books)); // [{ author: 'author 2' }]
+//
+// const books4 = [
+//   {
+//     name: 'besi',
+//     author: 'dostoevski',
+//     pagesCount: 100,
+//     genre: 'drama',
+//     link: 'https://some.ru',
+//   },
+//   {
+//     name: 'voina i mir',
+//     author: 'lev tolstoy',
+//     pagesCount: 1000,
+//     genre: 'drama',
+//     link: '', // не может быть пустой строкой
+//   },
+// ];
+// console.log(getInvalidBooks(books4));
 
-const genres = ['drama', 'horror', 'fantasy', 'classic'];
-
-const schema = yup.object().shape({
-  name: yup.string().required(),
-  author: yup.string().required(),
-  pagesCount: yup.number().positive().integer(),
-  link: yup.string().url().min(1),
-  genre: yup.string().oneOf(genres),
-});
-
-export default function getInvalidBooks(books) {
-  return books.filter((book) => !schema.isValidSync(book));
+// 8. Прокси
+function validate(target, key, protectedProps) {
+  if (!(key in target) || new Set(protectedProps).has(key)) {
+    throw new Error(`Access to '${key}' is restricted`);
+  }
 }
 
-const books = [{ name: 'book', author: 'author' }, { author: 'author 2' }];
-console.log(getInvalidBooks(books)); // [{ author: 'author 2' }]
+export default function protect(user, protectedProps) {
+  return new Proxy(user, {
+    get(target, key) {
+      validate(target, key, protectedProps);
+      return target[key];
+    },
+    set(target, key, value) {
+      validate(target, key, protectedProps);
+      target[key] = value;
+      return true;
+    },
+  });
+}
 
-const books4 = [
-  {
-    name: 'besi',
-    author: 'dostoevski',
-    pagesCount: 100,
-    genre: 'drama',
-    link: 'https://some.ru',
-  },
-  {
-    name: 'voina i mir',
-    author: 'lev tolstoy',
-    pagesCount: 1000,
-    genre: 'drama',
-    link: '', // не может быть пустой строкой
-  },
-];
-console.log(getInvalidBooks(books4));
+const user = {
+  name: 'John',
+  age: 25,
+  password: 'secret',
+};
+
+const protectedProps = ['password'];
+
+const protectedUser = protect(user, protectedProps);
+console.log(protectedUser.name); // John
+console.log(protectedUser.age); // 25
+// console.log(protectedUser.password); // Error: Access to 'password' is restricted
+
+console.log((protectedUser.name = 'Jane')); // установит значение 'Jane' в свойство 'name'
+console.log((protectedUser.password = 'newPassword')); // Error: Access to 'password' is restricted
