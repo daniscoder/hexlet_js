@@ -106,59 +106,97 @@
 // console.log(url.equals(new Url(googleUrl.replace('80', '443'))))
 
 // 6. Fluent Interface
-function trim(str) {
-  return str.trim().toLowerCase();
-}
-
-export default function normalize(arr) {
-  const result = arr.reduce((acc, city) => {
-    const name = trim(city.name);
-    const country = trim(city.country);
-    !acc[country] ? (acc[country] = [name]) : acc[country].push(name);
-    return acc;
-  }, {});
-
-  return Object.keys(result)
-    .sort()
-    .reduce((acc, country) => {
-      acc[country] = Array.from(new Set(result[country])).sort();
-      return acc;
-    }, {});
-}
-
-const countries = [
-  { name: 'Miami', country: 'usa' },
-  { name: 'samarA', country: '  ruSsiA' },
-  { name: 'Moscow ', country: ' Russia' },
-];
-
-console.log(normalize(countries));
-// {
-//   russia: [
-//     'moscow',
-//     'samara',
-//   ],
-//   usa: [
-//     'miami',
-//   ],
+// function trim(str) {
+//   return str.trim().toLowerCase();
 // }
+//
+// export default function normalize(arr) {
+//   const result = arr.reduce((acc, city) => {
+//     const name = trim(city.name);
+//     const country = trim(city.country);
+//     !acc[country] ? (acc[country] = [name]) : acc[country].push(name);
+//     return acc;
+//   }, {});
+//
+//   return Object.keys(result)
+//     .sort()
+//     .reduce((acc, country) => {
+//       acc[country] = Array.from(new Set(result[country])).sort();
+//       return acc;
+//     }, {});
+// }
+//
+// const countries = [
+//   { name: 'Miami', country: 'usa' },
+//   { name: 'samarA', country: '  ruSsiA' },
+//   { name: 'Moscow ', country: ' Russia' },
+// ];
+//
+// console.log(normalize(countries));
+// // {
+// //   russia: [
+// //     'moscow',
+// //     'samara',
+// //   ],
+// //   usa: [
+// //     'miami',
+// //   ],
+// // }
+//
+// const raw = [
+//   { name: 'istanbul', country: 'turkey' },
+//   { name: 'Moscow ', country: ' Russia' },
+//   { name: 'iStanbul', country: 'tUrkey' },
+//   { name: 'antalia', country: 'turkeY ' },
+//   { name: 'samarA', country: '  ruSsiA' },
+//   { name: 'Miami', country: 'usa' },
+// ];
+// console.log(normalize(raw));
+// // {
+// //   france: [
+// //     'marcel',
+// //     'paris',
+// //   ],
+// //     spain: [
+// //   'madrid',
+// //   'valencia',
+// // ],
+// // };
 
-const raw = [
-  { name: 'istanbul', country: 'turkey' },
-  { name: 'Moscow ', country: ' Russia' },
-  { name: 'iStanbul', country: 'tUrkey' },
-  { name: 'antalia', country: 'turkeY ' },
-  { name: 'samarA', country: '  ruSsiA' },
-  { name: 'Miami', country: 'usa' },
+// 7. Сборщики
+import yup from 'yup';
+
+const genres = ['drama', 'horror', 'fantasy', 'classic'];
+
+const schema = yup.object().shape({
+  name: yup.string().required(),
+  author: yup.string().required(),
+  pagesCount: yup.number().positive().integer(),
+  link: yup.string().url().min(1),
+  genre: yup.string().oneOf(genres),
+});
+
+export default function getInvalidBooks(books) {
+  return books.filter((book) => !schema.isValidSync(book));
+}
+
+const books = [{ name: 'book', author: 'author' }, { author: 'author 2' }];
+console.log(getInvalidBooks(books)); // [{ author: 'author 2' }]
+
+const books4 = [
+  {
+    name: 'besi',
+    author: 'dostoevski',
+    pagesCount: 100,
+    genre: 'drama',
+    link: 'https://some.ru',
+  },
+  {
+    name: 'voina i mir',
+    author: 'lev tolstoy',
+    pagesCount: 1000,
+    genre: 'drama',
+    link: '', // не может быть пустой строкой
+  },
 ];
-console.log(normalize(raw));
-// {
-//   france: [
-//     'marcel',
-//     'paris',
-//   ],
-//     spain: [
-//   'madrid',
-//   'valencia',
-// ],
-// };
+console.log(getInvalidBooks(books4));
