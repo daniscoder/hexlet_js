@@ -74,37 +74,51 @@
 //   console.error(err);
 // });
 
-// 8. Таймеры
-import fs from 'fs';
+// // 8. Таймеры
+// import fs from 'fs';
+//
+// const watch = (filepath, interval, cb) => {
+//   let lastUpd = Date.now();
+//   const id = setInterval(() => {
+//     fs.stat(filepath, (error2, stats) => {
+//       if (error2) {
+//         clearInterval(id);
+//         cb(error2);
+//         return;
+//       }
+//       if (stats.mtimeMs > lastUpd) {
+//         lastUpd = stats.mtimeMs;
+//         cb(null);
+//       }
+//     });
+//   }, interval);
+//   return id;
+// };
+//
+// const id = watch('test.txt', 500, (err) => {
+//   console.log(err, 'Wow!');
+// });
+//
+// setTimeout(() => fs.appendFileSync('test.txt', 'ehu'), 700);
+// setTimeout(() => clearInterval(id), 5000); // остановить отслеживание через 5 секунд
 
-const watch = (filepath, interval, cb) => {
-  let lastUpd = 0;
-  fs.stat(filepath, (error1, { mtimeMs: mtimeMs }) => {
-    if (error1) {
-      cb(error1);
-      return;
-    }
-    lastUpd = mtimeMs;
-  });
-  const id = setInterval(() => {
-    fs.stat(filepath, (error2, { mtimeMs: mtimeMs }) => {
-      if (error2) {
-        clearInterval(id);
-        cb(error2);
-        return;
-      }
-      if (mtimeMs > lastUpd) {
-        lastUpd = mtimeMs;
-        cb();
-      }
-    });
-  }, interval);
-  return id;
+// //9. Промисы (Promise)
+// import fsp from 'fs/promises';
+//
+// export const reverse = (filepath) => {
+//   return fsp.readFile(filepath, 'utf8')
+//     .then((data) => data.split('\n').reverse().join('\n'))
+//     .then((data) => fsp.writeFile(filepath, data));
+// };
+//
+// reverse('file.txt');
+
+// 10. Обработка ошибок в промисах
+import fsp from 'fs/promises';
+
+export const touch = (filepath) => {
+  return fsp.access(filepath).catch(() => fsp.writeFile(filepath, ''));
 };
 
-const id = watch('test.txt', 500, (err) => {
-  console.log(err, 'Wow!');
-});
+touch('file2.txt').then(() => console.log('created!'));
 
-setTimeout(() => fs.appendFileSync('test.txt', 'ehu'), 700);
-setTimeout(() => clearInterval(id), 5000); // остановить отслеживание через 5 секунд
