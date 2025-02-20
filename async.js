@@ -77,13 +77,34 @@
 // 8. Таймеры
 import fs from 'fs';
 
-export const watch = (filepath, interval, cb) => {
+const watch = (filepath, interval, cb) => {
+  let lastUpd = 0;
+  fs.stat(filepath, (error1, { mtimeMs: mtimeMs }) => {
+    if (error1) {
+      cb(error1);
+      return;
+    }
+    lastUpd = mtimeMs;
+  });
+  const id = setInterval(() => {
+    fs.stat(filepath, (error2, { mtimeMs: mtimeMs }) => {
+      if (error2) {
+        clearInterval(id);
+        cb(error2);
+        return;
+      }
+      if (mtimeMs > lastUpd) {
+        lastUpd = mtimeMs;
+        cb();
+      }
+    });
+  }, interval);
+  return id;
+};
 
-}
-
-const id = watch(filepath, 500, (err) => {
-  console.log('Wow!');
+const id = watch('test.txt', 500, (err) => {
+  console.log(err, 'Wow!');
 });
 
-setTimeout(() => fs.appendFileSync(filepath, 'ehu'), 700);
+setTimeout(() => fs.appendFileSync('test.txt', 'ehu'), 700);
 setTimeout(() => clearInterval(id), 5000); // остановить отслеживание через 5 секунд
