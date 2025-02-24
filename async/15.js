@@ -27,8 +27,3 @@ export const getBadLinks = async (url) => {
 const url = 'https://github.com';
 const links = await getBadLinks(url);
 console.log(links);
-// Гипотетический пример:
-// [
-//   'https://privet.hexlet/somepage',
-//   'https://privet.hexlet/another/page',
-// ]
